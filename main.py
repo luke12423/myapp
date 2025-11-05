@@ -5,7 +5,7 @@ from flask import Flask
 app = Flask(__name__)
 
 # Определяем маршрут для главной страницы
-@app.route("/")
+@app.route("/index")
 def home():
     return "Привет, мир! Flask работает!"  # Возвращаем текст в браузер
 

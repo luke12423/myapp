@@ -1,0 +1,161 @@
+{% extends "base.html" %}
+{% block title %}<title>Админ-панель</title>{% endblock %}
+{% block link %}
+<link rel="stylesheet" href="{{ url_for('static', filename='CSS/style.css') }}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<link rel="stylesheet" href="{{ url_for('static', filename='CSS/admin.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="admin-dashboard">
+    <!-- Быстрые действия -->
+    <div class="quick-actions">
+        <!-- Товары -->
+        <a href="/admin/add_product" class="action-card add">
+            <div class="action-icon">
+                <i class="fas fa-plus-circle"></i>
+            </div>
+            <div class="action-title">Добавить товар</div>
+            <div class="action-description">Создать новый товар в каталоге</div>
+        </a>
+
+        <a href="/admin/edit_products" class="action-card edit">
+            <div class="action-icon">
+                <i class="fas fa-edit"></i>
+            </div>
+            <div class="action-title">Редактировать товары</div>
+            <div class="action-description">Изменить существующие товары</div>
+        </a>
+
+        <!-- Новости -->
+        <a href="/admin/add_news" class="action-card add">
+            <div class="action-icon">
+                <i class="fas fa-plus-circle"></i>
+            </div>
+            <div class="action-title">Добавить новость</div>
+            <div class="action-description">Опубликовать новую статью</div>
+        </a>
+
+        <a href="/admin/edit_news" class="action-card edit">
+            <div class="action-icon">
+                <i class="fas fa-edit"></i>
+            </div>
+            <div class="action-title">Редактировать новости</div>
+            <div class="action-description">Управление новостями</div>
+        </a>
+
+        <!-- Пользователи и заказы -->
+        <a href="/admin/users" class="action-card users">
+            <div class="action-icon">
+                <i class="fas fa-users"></i>
+            </div>
+            <div class="action-title">Пользователи</div>
+            <div class="action-description">Управление пользователями</div>
+        </a>
+
+        <a href="/admin/orders" class="action-card orders">
+            <div class="action-icon">
+                <i class="fas fa-shopping-bag"></i>
+            </div>
+            <div class="action-title">Заказы</div>
+            <div class="action-description">Просмотр и управление заказами</div>
+        </a>
+
+    </div>
+
+    <!-- Статистика -->
+    <div class="stats-grid">
+        <div class="stats-card orders">
+            <div class="stats-icon text-primary">
+                <i class="fas fa-shopping-bag"></i>
+            </div>
+            <div class="stats-number">{{ total_orders }}</div>
+            <div class="stats-label">Всего заказов</div>
+        </div>
+
+        <div class="stats-card pending">
+            <div class="stats-icon text-warning">
+                <i class="fas fa-clock"></i>
+            </div>
+            <div class="stats-number">{{ pending_orders }}</div>
+            <div class="stats-label">Ожидают обработки</div>
+        </div>
+
+        <div class="stats-card users">
+            <div class="stats-icon text-success">
+                <i class="fas fa-users"></i>
+            </div>
+            <div class="stats-number">{{ total_users }}</div>
+            <div class="stats-label">Всего пользователей</div>
+        </div>
+
+        <div class="stats-card revenue">
+            <div class="stats-icon text-info">
+                <i class="fas fa-chart-line"></i>
+            </div>
+            <div class="stats-number">{{ "%.2f"|format(total_revenue) }} ₽</div>
+            <div class="stats-label">Общая выручка</div>
+        </div>
+    </div>
+
+
+    <!-- Последняя активность -->
+    <div class="recent-activity">
+        <h3 class="chart-title mb-4">Последняя активность</h3>
+        <div class="activity-list">
+            <div class="activity-item">
+                <div class="activity-icon bg-primary">
+                    <i class="fas fa-shopping-cart"></i>
+                </div>
+                <div>
+                    <div class="fw-bold">Новый заказ #{{ recent_orders[0].id if recent_orders else '1245' }}</div>
+                    <small class="text-muted">Сумма: {{ "%.2f"|format(recent_orders[0].total_amount) if recent_orders
+                        else '12,999' }} ₽</small>
+                    <div class="text-muted small">{% if recent_orders %}
+                        {{ time_ago(recent_orders[0].created_at) }}
+                        {% else %}
+                        2 минуты назад
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="activity-item">
+                <div class="activity-icon bg-success">
+                    <i class="fas fa-user-plus"></i>
+                </div>
+                <div>
+                    <div class="fw-bold">Новый пользователь</div>
+                    <small class="text-muted">Зарегистрирован пользователь {{ last_register.username}}</small>
+                    <div class="text-muted small">{{ time_ago(last_register.created_at) }}</div>
+                </div>
+            </div>
+
+            <div class="activity-item">
+                <div class="activity-icon bg-warning">
+                    <i class="fas fa-box"></i>
+                </div>
+                <div>
+                    <div class="fw-bold">Добавлен новый товар</div>
+                    <small class="text-muted">Товар "{{last_product.name}}" добавлен в каталог</small>
+                    <div class="text-muted small">{{ time_ago(last_product.created_at) }}</div>
+                </div>
+            </div>
+
+            <div class="activity-item">
+                <div class="activity-icon bg-purple">
+                    <i class="fas fa-newspaper"></i>
+                </div>
+                <div>
+                    <div class="fw-bold">Опубликована новость</div>
+                    <small class="text-muted">Новая статья в блоге: {{last_news.title}}</small>
+                    <div class="text-muted small">{{ time_ago(last_news.date) }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Подключаем Chart.js для графиков -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{% endblock %}

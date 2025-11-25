@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block title %}<title>Новости</title>{% endblock %}
+{% block link %}<link rel="stylesheet" href="{{ url_for('static', filename='CSS/style.css') }} ">{% endblock %}
+{% block content %}
+<main class="container">
+    <div class="p-4 p-md-5 mb-4 rounded text-body-emphasis bg-body-secondary">
+        <div class="col-lg-6 px-0"><h1 class="display-4 fst-italic">Это страница с новостями</h1>
+            <p class="lead my-3">Здесь вы можете посмотреть весь список новостей</p>
+            <p class="lead mb-0"><a href="/catalog_news" class="text-body-emphasis fw-bold">Продолжить чтение...</a></p></div>
+    </div>
+
+    <div class="row g-5">
+        <div class="col-md-8"><h3 class="pb-4 mb-4 fst-italic border-bottom">
+            Последняя новость</h3>
+            <img src="{{last.image}}" class="image-new"/>
+            <article class="blog-post"><h2 class="display-5 link-body-emphasis mb-1">{{last.title}}</h2>
+                <p class="blog-post-meta">{{last.date.strftime('%d.%m.%Y')}} by
+                    {% if last.author %}
+                    {% if last.author.name %}
+                    {{last.author.name}}
+                    {% else %}
+                    {{ last.author.username }}
+                    {% endif %}
+                    {% else %}
+                    Система
+                    {% endif %}</p>
+                <p>{{last.text}}</p>
+        </div>
+        <div class="col-md-4">
+            <div class="position-sticky" style="top: 2rem;">
+                <div class="p-4 mb-3 bg-body-tertiary rounded"><h4 class="fst-italic">О нас</h4>
+                    <p class="mb-0">Здесь представлены интереснейшие статьи, новости и т.д.</p></div>
+                <div><h4 class="fst-italic">Последние посты</h4>
+                    <ul class="list-unstyled">
+                        {% for new in news %}
+                        <li>
+                            <a class="d-flex flex-column flex-lg-row gap-3 align-items-start align-items-lg-center py-3 link-body-emphasis text-decoration-none border-top"
+                               href="/catalog_news/{{new.id}}">
+                                <div class="image-news">
+                                    <img src="{{new.image}}" class="image-news"/>
+                                </div>
+                                <div class="col-lg-8"><h6 class="mb-0">{{new.title}}</h6> <small
+                                        class="text-body-secondary">{{new.date.strftime('%d.%m.%Y %H:%M')}}</small></div>
+                            </a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="p-4"><h4 class="fst-italic">Архив</h4>
+                    <ol class="list-unstyled mb-0">
+                        {% for archive in archives %}
+                        <li><a href="/catalog_news/{{archive.year}}/{{archive.month}}">{{archive.month_name}} {{archive.year}}</a></li>
+                        {% endfor %}
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}

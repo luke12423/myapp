@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %}<title>Страница не найдена</title>{% endblock %}
+{% block link %}<link rel="stylesheet" href="{{ url_for('static', filename='CSS/error.css') }} ">{% endblock %}
+{% block content %}
+<h1>404 Ошибка страницы</h1>
+<p class="zoom-area"><b>CSS</b> анимация 404 странички. </p>
+<section class="error-container">
+  <span class="four"><span class="screen-reader-text">4</span></span>
+  <span class="zero"><span class="screen-reader-text">0</span></span>
+  <span class="four"><span class="screen-reader-text">4</span></span>
+</section>
+<div class="link-container">
+  <a href="{{ url_for('index') }}" class="more-link">Вернуться на главную страницу</a>
+</div>
+{% endblock %}

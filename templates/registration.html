@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}<title>Регистрация</title>{% endblock %}
+{% block content %}
+<div class="container d-flex align-items-center justify-content-center" style="min-height: 100vh;">
+	<div class="card w-100" style="max-width: 400px;">
+		<div class="card-body">
+			<h3 class="card-title text-center mb-4">Регистрация</h3>
+			<form action="/registration" method="POST">
+				<div class="mb-3">
+					<label for="username" class="form-label">Имя пользователя</label>
+					<input type="text" class="form-control" id="username" name="username"
+					       aria-describedby="usernameHelp">
+					<div id="usernameHelp" class="form-text">Ваше имя пользователя останется конфиденциальным.</div>
+				</div>
+                <div class="mb-3">
+					<label for="email" class="form-label">Почта</label>
+					<input type="email" class="form-control" id="email" name="email">
+				</div>
+				<div class="mb-3">
+					<label for="password" class="form-label">Пароль</label>
+					<input type="password" class="form-control" id="password" name="password">
+				</div>
+				<button type="submit" class="btn btn-primary w-100">Зарегистрироваться</button>
+			</form>
+		</div>
+	</div>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+{% endblock %}

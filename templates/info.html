@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% block title %}<title>Информация о нас</title>{% endblock %}
+{% block link %}<link rel="stylesheet" href="{{ url_for('static', filename='CSS/style.css') }} ">{% endblock %}
+
+{% block content %}
+<main>
+    <div class="container marketing"> <!-- Three columns of text below the carousel -->
+        <div class="row">
+            <div class="col-lg-4">
+                <img src="/static/Images/adres.jpg" class="circle-image">
+                <h2 class="fw-normal">Адрес</h2>
+                <p>Как нас найти?</p>
+                <p><a class="btn btn-secondary" href="#adres">Подробнее »</a></p></div><!-- /.col-lg-4 -->
+            <div class="col-lg-4">
+                <img src="/static/Images/telephone.jpg" class="circle-image">
+                <h2 class="fw-normal">Телефоны</h2>
+                <p>Позвоните нам</p>
+                <p><a class="btn btn-secondary" href="#telephone">Подробнее »</a></p></div><!-- /.col-lg-4 -->
+            <div class="col-lg-4">
+                <img src="/static/Images/graphic.jpg" class="circle-image">
+                <h2 class="fw-normal">Рабочий график</h2>
+                <p>Приходи только в рабочее время</p>
+                <p><a class="btn btn-secondary" href="#graphic">Подробнее »</a></p></div><!-- /.col-lg-4 --> </div>
+        <!-- /.row --> <!-- START THE FEATURETTES -->
+        <hr class="featurette-divider">
+        <div class="row featurette">
+            <div id="adres"></div>
+            <div class="col-md-7"><h2 class="featurette-heading fw-normal lh-1">Вы  можете найти нас здесь</h2>
+                <p class="lead">Московский проспект, 15 Московский проспект, 15, Чебоксары, Чувашская Республика — Чувашия, 428015</p></div>
+            <div class="col-md-5">
+                    <div style="vertical-align:top;">
+                        <iframe src="https://yandex.ru/map-widget/v1/?ll=47.227271%2C56.143910&mode=whatshere&whatshere%5Bpoint%5D=47.223807%2C56.145380&whatshere%5Bzoom%5D=17&z=16.8"
+                                width="500" height="500" frameborder="1" allowfullscreen="true"
+                                style="vertical-align:top;"></iframe>
+                    </div>
+                </svg>
+            </div>
+        </div>
+        <hr class="featurette-divider">
+        <div class="row featurette">
+            <div id="telephone"></div>
+            <div class="col-md-7 order-md-2"><h2 class="featurette-heading fw-normal lh-1">Телефоны университета:</h2>
+                <p class="lead">+7 (8352) 45-02-79 (отдел делопроизводства)</p>
+                <p class="lead">+7 (8352) 45-21-24 (общий отдел)</p>
+                <p class="lead">+7 (8352) 45-23-39 (приемная комиссия)</p>
+                <p class="lead">
+                    <strong>Факс:</strong>
+                    +7 (8352) 45-02-79
+                </p>
+            </div>
+            <div class="col-md-5 order-md-1">
+                <img src="/static/Images/telephone.jpg" class="image-telephone">
+            </div>
+        </div>
+        <hr class="featurette-divider">
+        <div class="row featurette">
+            <div id="graphic"></div>
+            <div class="col-md-7"><h2 class="featurette-heading fw-normal lh-1">Часы работы</h2>
+                <p class="lead"><strong>Понедельник</strong>&nbsp; &nbsp;8-17</p>
+                <p class="lead"><strong>Вторник</strong>&nbsp; &nbsp;8-17</p>
+                <p class="lead"><strong>Среда</strong>&nbsp; &nbsp;8-17</p>
+                <p class="lead"><strong>Четверг</strong>&nbsp; &nbsp;8-17</p>
+                <p class="lead"><strong>Пятница</strong>&nbsp; &nbsp;8-17</p>
+                <p class="lead"><strong>Суббота</strong>&nbsp; &nbsp;9-14</p>
+                <p class="lead"><strong>Воскресенье</strong>&nbsp; &nbsp;Выходной</p>
+            </div>
+            <div class="col-md-5">
+                <img src="/static/Images/graphic.jpg" class="image-telephone">
+            </div>
+        </div>
+        <hr class="featurette-divider"> <!-- /END THE FEATURETTES --> </div><!-- /.container --> <!-- FOOTER -->
+</main>
+{% endblock %}

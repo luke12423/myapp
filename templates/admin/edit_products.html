@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}<title>Редактирование товаров</title>{% endblock %}
+{% block link %}
+<link rel="stylesheet" href="{{ url_for('static', filename='CSS/style.css') }} ">{% endblock %}
+{% block content %}
+
+<div class="cards">
+    <!--     Карточка товара -->
+    {% for prod in products %}
+    <div class="card" data-product-id="{{ prod.id }}">
+        <!-- Верхняя часть -->
+        <div class="card__top">
+            <!-- Изображение-ссылка товара -->
+            <a class="card__image">
+                <img src="{{prod.image}}"/>
+            </a>
+        </div>
+        <!-- Нижняя часть -->
+        <div class="card__bottom">
+            <!-- Цены на товар (с учетом скидки и без)-->
+            <div class="card__prices">
+                <div class="card__price card__price--discount">{{prod.price}}</div>
+                <!--<div class="card__price card__price--common">{{prod.price}}</div>-->
+            </div>
+            <!-- Ссылка-название товара -->
+            <a class="card__title">
+                {{prod.name}}
+            </a>
+
+            <div class="card__actions">
+                <a class="card__edit" href="/admin/edit_product/{{prod.id}}">Изменить</a>
+                {% if prod.is_deleted==False %}
+                <a class="card__delete" data-product-id="{{ prod.id }}">Удалить</a>
+                {% else %}
+                <a class="card__recover" data-product-id="{{ prod.id }}">Восстановить</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+<script src="{{ url_for('static', filename='JS/edit_products.js') }}"></script>
+
+{% endblock %}

@@ -1,14 +1,4 @@
-# Импортируем Flask
-from flask import Flask
+from app import app
 
-# Создаём экземпляр приложения Flask
-app = Flask(__name__)
-
-# Определяем маршрут для главной страницы
-@app.route("/")
-def home():
-    return "Привет, мир! Flask работает!"  # Возвращаем текст в браузер
-
-# Запускаем сервер
-if __name__ == "__main__":
-    app.run()
+if __name__ == '__main__':
+	app.run(debug=True)

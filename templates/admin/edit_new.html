@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+{% block link %}
+<link rel="stylesheet" href="{{ url_for('static', filename='CSS/add.css') }} ">
+{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <h1 class="form-title">Редактирование новости</h1>
+
+    <form action="/admin/edit_news/{{ new.id }}" method="POST" enctype="multipart/form-data" class="form-contact">
+        <div class="form-group">
+            <label for="title">Заголовок новости</label>
+            <input type="text" id="title" name="title" class="form-input"
+                   placeholder="Введите заголовок новости" value="{{ new.title }}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="text">Основной текст новости</label>
+            <textarea id="text" name="text" class="form-input"
+                      placeholder="Введите основной текст новости..." rows="6" required>{{ new.text }}</textarea>
+        </div>
+
+        <div class="form-group">
+            <label>Изображение для новости</label>
+
+            <!-- Текущее изображение -->
+            {% if new.image %}
+            <div class="current-image">
+                <p>Текущее изображение:</p>
+                <img src="{{ new.image }}" alt="{{ new.title }}" class="image-preview">
+            </div>
+        </div>
+        {% endif %}
+
+        <div class="file-input-container">
+            <label for="file-input" class="file-input-label">
+                📁 Выберите новое изображение
+            </label>
+            <input id="file-input" type="file" name="file" accept="image/*">
+        </div>
+        <div class="file-name" id="file-name">
+            {% if new.image %}
+            Текущий файл: {{ new.image.split('/')[-1] }}
+            {% else %}
+            Файл не выбран
+            {% endif %}
+        </div>
+
+    <div class="form-actions">
+        <button type="submit" class="submit-btn">Сохранить изменения</button>
+        <a href="/admin/news" class="cancel-btn">Отмена</a>
+    </div>
+    </form>
+</div>
+
+<script>
+    // Обработка отображения имени файла
+    document.getElementById('file-input').addEventListener('change', function(e) {
+        if (e.target.files[0]) {
+            document.getElementById('file-name').textContent = 'Новый файл: ' + e.target.files[0].name;
+        } else {
+            document.getElementById('file-name').textContent = '{% if new.image %}Текущий файл: {{ new.image.split("/")[-1] }}{% else %}Файл не выбран{% endif %}';
+        }
+    });
+
+    // Обработка галочки "Сохранить текущее изображение"
+    const keepImageCheckbox = document.querySelector('input[name="keep_image"]');
+    if (keepImageCheckbox) {
+        keepImageCheckbox.addEventListener('change', function(e) {
+            const fileInput = document.getElementById('file-input');
+            if (e.target.checked) {
+                fileInput.disabled = true;
+                document.getElementById('file-name').textContent = 'Текущий файл: {{ new.image.split("/")[-1] }}';
+            } else {
+                fileInput.disabled = false;
+            }
+        });
+    }
+
+    // Плавная валидация форм
+    const form = document.querySelector('.form-contact');
+    form.addEventListener('submit', function(e) {
+        const inputs = form.querySelectorAll('input[required], textarea[required]');
+        let isValid = true;
+
+        inputs.forEach(input => {
+            if (!input.value.trim()) {
+                input.style.borderColor = '#e74c3c';
+                isValid = false;
+            } else {
+                input.style.borderColor = '#27ae60';
+            }
+        });
+
+        if (!isValid) {
+            e.preventDefault();
+            alert('Пожалуйста, заполните все обязательные поля');
+        }
+    });
+
+    // Сброс цвета границы при фокусе
+    const formInputs = document.querySelectorAll('.form-input');
+    formInputs.forEach(input => {
+        input.addEventListener('focus', function() {
+            this.style.borderColor = '#667eea';
+        });
+    });
+</script>
+{% endblock %}

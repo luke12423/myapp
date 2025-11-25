@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    {% block title %}{% endblock %}
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='CSS/bootstrap.min.css') }} ">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    {% block link %}{% endblock %}
+    <!-- Bootstrap core CSS -->
+</head>
+
+
+<body>
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+<div class="flash-messages">
+    {% for category, message in messages %}
+    <div class="flash-message flash-{{ category }}">{{ message }}</div>
+    {% endfor %}
+</div>
+{% endif %}
+{% endwith %}
+<div class="container1">
+    <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
+        <div class="col-md-3 mb-2 mb-md-0"><a href="/"
+                                              class="d-inline-flex link-body-emphasis text-decoration-none">
+            <svg class="bi" width="40" height="32" role="img" aria-label="Bootstrap">
+                <use xlink:href="#bootstrap"></use>
+            </svg>
+        </a></div>
+        <ul class="nav nav-pills col-12 col-md-auto mb-2 justify-content-center mb-md-0">
+            <li class="nav-item">
+                <a href="/index"
+                   class="nav-link {{ 'active' if request.endpoint == 'index' else '' }}">
+                    Домашняя
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="/catalog"
+                   class="nav-link {{ 'active' if request.endpoint and 'catalog' in request.endpoint else '' }}">
+                    Каталог товаров
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="/info"
+                   class="nav-link {{ 'active' if request.endpoint == 'info' else '' }}">
+                    Информация об организации
+                </a>
+            </li>
+        </ul>
+        <div class="col-md-3 text-end me-3">
+            {% if current_user.is_authenticated %}
+            {% if current_user.is_admin %}
+            <a class="btn btn-warning btn-sm me-2" href="{{ url_for('admin_dashboard') }}">
+                <i class="fas fa-crown me-1"></i>Админ-панель
+            </a>
+            {% endif %}
+            <div class="btn-group">
+                <button type="button" class="btn btn-outline-primary btn-sm dropdown-toggle" data-bs-toggle="dropdown">
+                    <i class="fas fa-user me-1"></i>{{ current_user.username }}
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="{{ url_for('profile') }}">
+                        <i class="fas fa-user-circle me-2"></i>Профиль
+                    </a></li>
+
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+                    <li><a class="dropdown-item text-danger" href="{{ url_for('logout') }}">
+                        <i class="fas fa-sign-out-alt me-2"></i>Выйти
+                    </a></li>
+                </ul>
+            </div>
+            {% else %}
+            <a class="btn btn-outline-primary me-2" href="/login">
+                <i class="fas fa-sign-in-alt me-1"></i>Войти
+            </a>
+            <a class="btn btn-primary" href="/registration">
+                <i class="fas fa-user-plus me-1"></i>Регистрация
+            </a>
+            {% endif %}
+        </div>
+    </header>
+</div>
+{% block content %}{% endblock %}
+
+<div class="container1">
+    <footer class="d-flex justify-content-between align-items-center py-3  border-top footer"><p
+            class="col-md-4 mb-0 text-body-secondary">© 2025 Company, Inc</p> <a href="/"
+                                                                                 class="col-md-4 d-flex align-items-center justify-content-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none"
+                                                                                 aria-label="Bootstrap">
+        <svg class="bi me-2" width="40" height="32" aria-hidden="true">
+            <use xlink:href="#bootstrap"></use>
+        </svg>
+    </a>
+        <ul class="nav col-md-4 justify-content-end">
+            <li class="nav-item"><a href="/index" class="nav-link px-2 text-body-secondary">Домашняя</a></li>
+            <li class="nav-item"><a href="/catalog" class="nav-link px-2 text-body-secondary">Каталог товаров</a></li>
+            <li class="nav-item"><a href="/info" class="nav-link px-2 text-body-secondary">Инфрмация об организации</a>
+            </li>
+        </ul>
+    </footer>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+        crossorigin="anonymous"></script>
+
+
+</body>
+</html>

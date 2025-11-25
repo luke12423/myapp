@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% block link %}
+<link rel="stylesheet" href="{{ url_for('static', filename='CSS/product.css') }} ">{% endblock %}
+{% block content %}
+
+{% block title %}<title>{{prod.name}}</title>{% endblock %}
+
+<nav class="navbar navbar-expand-lg" style="background-color: #e3f2fd;" data-bs-theme="light">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">Каталог</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor03"
+                aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarColor03">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="#">Одежда</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Спорт</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Товары для дома</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Электроника</a>
+                </li>
+            </ul>
+            <form class="d-flex" role="search" method="POST" action="/search">
+                {% if current_user.is_authenticated %}
+                <a class="nav-cart-simple" href="{{ url_for('cart') }}">
+                    🛒 Корзина
+                    {% if cart_count and cart_count > 0 %}
+                    <span class="cart-counter">{{ cart_count }}</span>
+                    {% endif %}
+                </a>
+                {% endif %}
+                <input class="form-control me-2" type="search" placeholder="Наименование товара" aria-label="search"
+                       name="search">
+                <button class="btn btn-outline-primary" type="submit">Поиск</button>
+            </form>
+        </div>
+    </div>
+</nav>
+
+<div class="product-card">
+    <div class="product-image-container">
+        <img src="{{prod.image}}" class="product-image"/>
+    </div>
+
+    <div class="product-info">
+        <div class="product-name">{{prod.name}}</div>
+
+        <div class="product-price">{{prod.price}} ₽</div>
+
+        <div class="product-description">
+            {{prod.description}}
+        </div>
+        {% if prod.is_deleted==True %}
+        <div class="ended">Нет в наличии</div>
+        {% else %}
+        {% if prod.id in cart_product_ids %}
+        <button class="added-to-cart-btn" disabled>В корзине</button>
+        {% else %}
+        <button class="add-to-cart-btn" data-product-id="{{ prod.id }}">В корзину</button>
+        {% endif %}
+        {% endif %}
+    </div>
+</div>
+<script src="{{ url_for('static', filename='JS/product.js') }}"></script>
+{% endblock %}

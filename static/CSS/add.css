@@ -1,0 +1,341 @@
+@charset "UTF-8";
+* {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            display: grid;
+            grid-template-rows: auto 1fr auto;
+            min-height: 100vh;
+        }
+
+        .form-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            width: 100%;
+            max-width: 600px;
+            margin: auto;
+            align-self: center;
+        }
+
+        .form-title {
+            text-align: center;
+            color: #333;
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 30px;
+        }
+
+        .form-contact {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            color: #555;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .form-input {
+            padding: 15px 20px;
+            border: 2px solid #e1e5e9;
+            border-radius: 12px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #667eea;
+            background: white;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .form-input::placeholder {
+            color: #a0a4a8;
+        }
+
+        textarea.form-input {
+            resize: vertical;
+            min-height: 120px;
+            font-family: inherit;
+            white-space: pre-wrap;
+            overflow-wrap: break-word;
+        }
+        .textarea{
+            white-space: pre-wrap;
+            overflow-wrap: break-word;
+        }
+
+.current-image {
+    margin-top: 15px;
+    padding: 10px;
+    background-color: #f8f9fa;
+    border-radius: 5px;
+}
+
+.product-image-preview {
+    max-width: 200px;
+    max-height: 200px;
+    margin-top: 10px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.form-actions {
+    display: flex;
+    gap: 15px;
+    margin-top: 25px;
+}
+
+
+.current-image {
+    margin-bottom: 15px;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border: 1px solid #e9ecef;
+}
+
+.current-image p {
+    margin: 0 0 10px 0;
+    font-weight: 500;
+    color: #495057;
+}
+
+.image-preview {
+    max-width: 300px;
+    max-height: 200px;
+    border-radius: 6px;
+    border: 2px solid #dee2e6;
+    margin-bottom: 10px;
+}
+
+.keep-image {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    color: #495057;
+    cursor: pointer;
+}
+
+.keep-image input[type="checkbox"] {
+    margin: 0;
+}
+
+.form-actions {
+    display: flex;
+    gap: 15px;
+    margin-top: 25px;
+}
+
+.submit-btn {
+    flex: 2;
+    padding: 12px 25px;
+    background-color: #667eea;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+}
+
+.cancel-btn {
+    flex: 1;
+    padding: 15px 25px;
+    background-color: #6c757d;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    text-align: center;
+    transition: background-color 0.3s;
+    font-size: 16px;
+    border-radius: 12px;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 10px;
+
+}
+
+.submit-btn:hover {
+    background-color: #5a67d8;
+}
+
+.cancel-btn:hover {
+    transform: translateY(-3px);
+    background-color: #5a6268;
+    color: white;
+}
+
+.cancel-btn:active {
+            transform: translateY(-1px);
+        }
+
+/* Стили для отключенного input */
+input[type="file"]:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+input[type="file"]:disabled + .file-input-label {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+.cancel-btn:hover {
+    background-color: #5a6268;
+}
+
+        /* Стили для файлового input */
+        .file-input-container {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+        }
+
+        .file-input-label {
+            display: block;
+            padding: 15px 20px;
+            background: linear-gradient(135deg, #0d6efd 0%, #0dcaf0 100%);
+            color: white !important;
+            border-radius: 12px;
+            text-align: center;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+        }
+
+        .file-input-label:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        #file-input {
+            position: absolute;
+            left: -9999px;
+        }
+
+        .file-name {
+            margin-top: 8px;
+            font-size: 14px;
+            color: #666;
+            font-style: italic;
+        }
+
+        /* Стили для select */
+        .select-container {
+            position: relative;
+        }
+
+        .select-container::after {
+            content: "▼";
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #667eea;
+            pointer-events: none;
+            font-size: 12px;
+        }
+
+        select.form-input {
+            appearance: none;
+            background: #f8f9fa url('data:image/svg+xml;utf8,<svg fill="%23667eea" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>') no-repeat right 20px center;
+            background-size: 16px;
+        }
+
+        /* Стили для кнопки отправки */
+        .submit-btn {
+            background: linear-gradient(135deg, #0d6efd 0%, #0dcaf0 100%);
+            color: white;
+            border: none;
+            padding: 18px 30px;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 10px;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .submit-btn:active {
+            transform: translateY(-1px);
+        }
+
+        /* Анимации */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .form-group {
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        .form-group:nth-child(1) { animation-delay: 0.1s; }
+        .form-group:nth-child(2) { animation-delay: 0.2s; }
+        .form-group:nth-child(3) { animation-delay: 0.3s; }
+        .form-group:nth-child(4) { animation-delay: 0.4s; }
+        .form-group:nth-child(5) { animation-delay: 0.5s; }
+        .form-group:nth-child(6) { animation-delay: 0.6s; }
+
+        /* Адаптивность */
+        @media (max-width: 768px) {
+            .form-container {
+                padding: 30px 20px;
+            }
+
+            .form-title {
+                font-size: 24px;
+            }
+
+            .form-input {
+                padding: 12px 15px;
+            }
+
+            .submit-btn {
+                padding: 15px 25px;
+                font-size: 16px;
+            }
+        }

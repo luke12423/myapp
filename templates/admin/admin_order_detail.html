@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block title %}<title>Заказ #{{ order.id }} - Админ-панель</title>{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Заказ #{{ order.id }}</h1>
+        <a href="{{ url_for('admin_orders') }}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left me-2"></i>Назад к заказам
+        </a>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">Товары в заказе</h5>
+                </div>
+                <div class="card-body">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Товар</th>
+                                <th>Цена</th>
+                                <th>Количество</th>
+                                <th>Сумма</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in order.items %}
+                            <tr>
+                                <td>{{ item.product.name }}</td>
+                                <td>{{ "%.2f"|format(item.price) }} ₽</td>
+                                <td>{{ item.quantity }}</td>
+                                <td>{{ "%.2f"|format(item.price * item.quantity) }} ₽</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="3" class="text-end"><strong>Итого:</strong></td>
+                                <td><strong>{{ "%.2f"|format(order.total_amount) }} ₽</strong></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Информация о заказе</h5>
+                </div>
+                <div class="card-body">
+                    <p><strong>Пользователь:</strong> {{ order.user.username }}</p>
+                    <p><strong>Email:</strong> {{ order.email }}</p>
+                    <p><strong>Телефон:</strong> {{ order.phone }}</p>
+                    <p><strong>Адрес:</strong> {{ order.shipping_address }}</p>
+                    <p><strong>Дата:</strong> {{ order.created_at.strftime('%d.%m.%Y %H:%M') }}</p>
+
+                    <form method="POST" action="{{ url_for('update_order_status', order_id=order.id) }}">
+                        <div class="mb-3">
+                            <label for="status" class="form-label">Статус заказа</label>
+                            <select class="form-select" id="status" name="status">
+                                <option value="pending" {% if order.status=='pending' %}selected{% endif %}>Ожидает</option>
+                                <option value="confirmed" {% if order.status=='confirmed' %}selected{% endif %}>Подтвержден</option>
+                                <option value="shipped" {% if order.status =='shipped' %}selected{% endif %}>Отправлен</option>
+                                <option value="delivered" {% if order.status =='delivered' %}selected{% endif %}>Доставлен</option>
+                                <option value="cancelled" {% if order.status =='cancelled' %}selected{% endif %}>Отменен</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Обновить статус</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

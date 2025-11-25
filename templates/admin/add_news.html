@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block link %}
+<link rel="stylesheet" href="{{ url_for('static', filename='CSS/add.css') }} ">
+{% endblock %}
+
+{% block content %}
+ <div class="form-container">
+        <h1 class="form-title">Добавление новости</h1>
+
+        <form action="/admin/add_news" method="POST" enctype="multipart/form-data" class="form-contact">
+            <div class="form-group">
+                <label for="title">Заголовок новости</label>
+                <input type="text" id="title" name="title" class="form-input" placeholder="Введите заголовок новости" required>
+            </div>
+
+
+            <div class="form-group">
+                <label for="text">Основной текст новости</label>
+                <textarea id="text" name="text" class="form-input" placeholder="Введите основной текст новости..." rows="6" required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Изображение для новости</label>
+                <div class="file-input-container">
+                    <label for="file-input" class="file-input-label">
+                        📁 Выберите файл изображения
+                    </label>
+                    <input id="file-input" type="file" name="file" accept="image/*">
+                </div>
+                <div class="file-name" id="file-name">Файл не выбран</div>
+            </div>
+
+            <button type="submit" class="submit-btn">Добавить новость</button>
+        </form>
+    </div>
+
+
+{% endblock %}

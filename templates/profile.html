@@ -1,0 +1,203 @@
+{% extends "base.html" %}
+{% block title %}<title>Профиль пользователя</title>{% endblock %}
+{% block link %}
+<link rel="stylesheet" href="{{ url_for('static', filename='CSS/profile.css') }}">
+{% endblock %}
+
+{% block content %}
+
+<div class="profile-container">
+    <div class="profile-header">
+        <h1>Профиль пользователя</h1>
+        <div class="user-avatar">
+            <div class="avatar-placeholder">
+                {{ current_user.name[0]|upper }}
+            </div>
+        </div>
+    </div>
+
+    <div class="profile-content">
+        <!-- Боковое меню -->
+        <div class="profile-sidebar">
+            <nav class="profile-nav">
+                <button class="nav-btn active" data-tab="info">Общая информация</button>
+                <button class="nav-btn" data-tab="edit">Редактирование</button>
+                <button class="nav-btn" data-tab="orders">Мои заказы</button>
+            </nav>
+        </div>
+
+        <!-- Основное содержимое -->
+        <div class="profile-main">
+            <!-- Вкладка общей информации -->
+            <div id="info" class="tab-content active">
+                <div class="info-card">
+                    <h3>Общая информация</h3>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <label>Имя:</label>
+                            <span>{{ current_user.name }}</span>
+                        </div>
+                        <div class="info-item">
+                            <label>Email:</label>
+                            <span>{{ current_user.email }}</span>
+                        </div>
+                        <div class="info-item">
+                            <label>Имя пользователя:</label>
+                            <span>{{ current_user.username }}</span>
+                        </div>
+                        <div class="info-item">
+                            <label>Дата регистрации:</label>
+                            <span>{{ current_user.created_at.strftime('%d.%m.%Y') }}</span>
+                        </div>
+                        <div class="info-item">
+                            <label>Последний вход:</label>
+                            <span>{{ current_user.last_seen.strftime('%d.%m.%Y %H:%M') }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stats-card">
+                    <h3>Статистика</h3>
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <div class="stat-number">{{ orders_count }}</div>
+                            <div class="stat-label">Всего заказов</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">{{ total_spent }} ₽</div>
+                            <div class="stat-label">Всего потрачено</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">{{ cart_items_count }}</div>
+                            <div class="stat-label">Товаров в корзине</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Вкладка редактирования -->
+            <div id="edit" class="tab-content">
+                <div class="edit-card">
+                    <h3>Редактирование профиля</h3>
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                    {% for category, message in messages %}
+                    {% if category == 'error' %}
+                    <div class="alert alert-error">
+                        {{ message }}
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+                    {% endif %}
+                    {% endwith %}
+                    <form method="POST" action="{{ url_for('update_profile') }}" class="edit-form"
+                          data-original-name="{{ current_user.name }}"
+                          data-original-email="{{ current_user.email }}"
+                          data-original-username="{{ current_user.username }}">
+                        <div class="form-group">
+                            <label for="name">Имя</label>
+                            <input type="text"
+                                   id="name"
+                                   name="name"
+                                   {% if current_user.name %}
+                                   value="{{ current_user.name }}"
+                                   {% else %}
+                                   placeholder="Введите ваше имя"
+                                   {% endif %}
+                                   class="form-input">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" name="email" value="{{ current_user.email }}"
+                                   class="form-input">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="username">Имя пользователя</label>
+                            <input type="text" id="username" name="username" value="{{ current_user.username }}"
+                                   class="form-input">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="current_password">Текущий пароль (для подтверждения изменений)</label>
+                            <input type="password" id="current_password" name="current_password" class="form-input">
+                        </div>
+
+                        <hr class="form-divider">
+
+                        <h4>Смена пароля</h4>
+                        <div class="form-group">
+                            <label for="new_password">Новый пароль</label>
+                            <input type="password" id="new_password" name="new_password" class="form-input">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="confirm_password">Подтвердите новый пароль</label>
+                            <input type="password" id="confirm_password" name="confirm_password" class="form-input">
+                        </div>
+
+                        <button type="submit" class="save-btn">Сохранить изменения</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Вкладка заказов -->
+            <div id="orders" class="tab-content">
+                <div class="orders-card">
+                    <h3>История заказов</h3>
+
+                    {% if orders %}
+                    <div class="orders-list">
+                        {% for order in orders %}
+                        <div class="order-item">
+                            <div class="order-header">
+                                <div class="order-info">
+                                    <span class="order-number">Заказ #{{ order.id }}</span>
+                                    <span class="order-date">{{ order.created_at.strftime('%d.%m.%Y %H:%M') }}</span>
+                                </div>
+                                <div class="order-status status-{{ order.status }}">
+                                    {{ order.status|replace('pending', 'Ожидает')|replace('confirmed',
+                                    'Подтвержден')|replace('shipped', 'Отправлен')|replace('delivered',
+                                    'Доставлен')|replace('cancelled', 'Отменен') }}
+                                </div>
+                            </div>
+
+                            <div class="order-details">
+                                <div class="order-items">
+                                    {% for item in order.items %}
+                                    <div class="order-item-product">
+                                        <span class="item-name">{{ item.product.name }}</span>
+                                        <span class="item-quantity">×{{ item.quantity }}</span>
+                                        <span class="item-price">{{ item.price }} ₽</span>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+
+                                <div class="order-total">
+                                    <strong>Итого: {{ order.total_amount }} ₽</strong>
+                                </div>
+                            </div>
+
+                            {% if order.shipping_address %}
+                            <div class="order-address">
+                                <strong>Адрес доставки:</strong> {{ order.shipping_address }}
+                            </div>
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <div class="no-orders">
+                        <p>У вас пока нет заказов</p>
+                        <a href="{{ url_for('catalog') }}" class="btn-primary">Перейти к покупкам</a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="{{ url_for('static', filename='JS/profile.js') }}"></script>
+{% endblock %}

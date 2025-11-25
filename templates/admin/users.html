@@ -1,0 +1,221 @@
+{% extends "base.html" %}
+{% block title %}<title>Пользователи</title>{% endblock %}
+{% block link %}
+<link rel="stylesheet" href="{{ url_for('static', filename='CSS/users.css') }} ">
+{% endblock %}
+{% block content %}
+
+    <!-- Основной контент -->
+    <div class="container py-4">
+        <div class="admin-container">
+            <!-- Заголовок -->
+            <div class="users-header" style="background: linear-gradient(135deg, #0d6efd 0%, #52a8ff 100%)">
+                <div class="row align-items-center">
+                    <div class="col-md-8" >
+                        <h1 class="mb-2" >
+                            <i class="fas fa-users me-2"></i>Управление пользователями
+                        </h1>
+                        <p class="mb-0">Всего пользователей: {{ users|length }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Статистика -->
+            <div class="row mt-0">
+                <div class="col-md-3">
+                    <div class="stats-card">
+                        <div class="stats-number" style="color:#0d6efd;">{{ total_users }}</div>
+                        <div class="stats-label">Всего пользователей</div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stats-card">
+                        <div class="stats-number" style="color:#0d6efd;">{{ admin_users }}</div>
+                        <div class="stats-label">Администраторов</div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stats-card">
+                        <div class="stats-number" style="color:#0d6efd;">{{ total_cart_items }}</div>
+                        <div class="stats-label">Товаров в корзинах</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Поиск и фильтры -->
+            <div class="search-box">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="fas fa-search"></i>
+                            </span>
+                            <input type="text" class="form-control" placeholder="Поиск по имени или email..." id="searchInput">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="btn-group w-100">
+                            <button class="btn btn-outline-primary active" data-filter="all">Все</button>
+                            <button class="btn btn-outline-primary" data-filter="admin">Админы</button>
+                            <button class="btn btn-outline-primary" data-filter="user">Пользователи</button>
+                            <button class="btn btn-outline-primary" data-filter="with-cart">С корзиной</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Список пользователей -->
+            <div id="usersList">
+                {% if users %}
+                <div class="row">
+                    {% for user in users %}
+                    <div class="col-lg-6 mb-3 user-item"
+                         data-user-type="{{ 'admin' if user.is_admin else 'user' }}"
+                         data-has-cart="{{ 'true' if user.cart_items else 'false' }}"
+                         data-search="{{ user.username.lower() }} {{ user.email.lower() }}">
+                        <div class="user-card">
+                            <div class="p-3">
+                                <div class="d-flex align-items-center">
+                                    <div class="user-avatar">
+                                        <i class="fas fa-user"></i>
+                                    </div>
+                                    <div class="user-info">
+                                        <div class="user-name">
+                                            {{ user.username|truncate(12, true, '...') }}
+                                            {% if user.is_admin %}
+                                            <span class="badge badge-admin ms-2">АДМИН</span>
+                                            {% else %}
+                                            <span class="badge badge-user ms-2">ПОЛЬЗОВАТЕЛЬ</span>
+                                            {% endif %}
+                                        </div>
+                                        <div class="user-email">{{ user.email }}</div>
+                                        <div class="user-meta">
+                                            <div class="row">
+
+                                                <div class="col-6">
+                                                    <small>
+                                                        <i class="fas fa-shopping-cart me-1"></i>
+                                                        {% if user.cart_items %}
+                                                        <span class="cart-items-count">{{ user.cart_items|length }} шт</span>
+                                                        {% else %}
+                                                        Корзина пуста
+                                                        {% endif %}
+                                                    </small>
+                                                </div>
+                                            </div>
+                                            {% if user.last_seen %}
+                                            <div class="mt-1">
+                                                <small>
+                                                    <i class="fas fa-clock me-1"></i>
+                                                    Последний вход: {{ user.last_seen.strftime('%d.%m.%Y %H:%M') }}
+                                                </small>
+                                            </div>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    <div class="user-actions">
+                                        {% if user.id != current_user.id %}
+                                        {% if user.is_admin %}
+                                        <button class="btn btn-warning btn-sm me-2"
+                                                onclick="removeAdmin({{ user.id }})"
+                                                id="admin-btn-{{ user.id }}"
+                                                title="Снять права администратора">
+                                            <i class="fas fa-user-times me-1"></i>Снять админа
+                                        </button>
+                                        {% else %}
+                                        <button class="btn btn-success btn-sm me-2"
+                                                onclick="makeAdmin({{ user.id }})"
+                                                id="admin-btn1-{{ user.id }}"
+                                                title="Назначить администратором">
+                                            <i class="fas fa-user-shield me-1"></i>Сделать админом
+                                        </button>
+                                        {% endif %}
+                                        <button class="btn btn-delete"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#deleteModal"
+                                                style="color:white;"
+                                                data-user-id="{{ user.id }}"
+                                                data-user-name="{{ user.username }}">
+                                            <i class="fas fa-trash me-1"></i>Удалить
+                                        </button>
+                                        {% else %}
+                                        <span class="text-muted">Это вы</span>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="empty-state">
+                    <div class="empty-state-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3>Пользователей нет</h3>
+                    <p class="text-muted">В системе еще не зарегистрировано ни одного пользователя.</p>
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Пагинация -->
+            {% if users and users|length > 12 %}
+            <nav aria-label="Page navigation">
+                <ul class="pagination">
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#" tabindex="-1">Предыдущая</a>
+                    </li>
+                    <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                    <li class="page-item">
+                        <a class="page-link" href="#">Следующая</a>
+                    </li>
+                </ul>
+            </nav>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Модальное окно подтверждения удаления -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalLabel">
+                        <i class="fas fa-exclamation-triangle text-warning me-2"></i>
+                        Подтверждение удаления
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Вы уверены, что хотите удалить пользователя <strong id="userNameToDelete"></strong>?</p>
+
+                    <div class="alert alert-warning">
+                        <h6 class="alert-heading">Внимание!</h6>
+                        <ul class="mb-0">
+                            <li>Все данные пользователя будут безвозвратно удалены</li>
+                            <li>Все товары в корзине пользователя будут удалены</li>
+                            <li>Это действие нельзя отменить</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <form method="POST" action="" id="deleteUserForm">
+                        <input type="hidden" name="user_id" id="userIdToDelete">
+                        <button type="submit" class="btn btn-danger">
+                            <i class="fas fa-trash me-1"></i>Да, удалить
+                        </button>
+                    </form>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="fas fa-times me-1"></i>Отмена
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+<script src="{{ url_for('static', filename='JS/users.js') }}"></script>
+{% endblock %}
